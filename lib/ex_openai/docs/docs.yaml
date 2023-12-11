@@ -3609,6 +3609,12 @@ paths:
           schema:
             type: string
           description: The ID of the message to retrieve.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetMessageRequest"
       responses:
         "200":
           description: OK
@@ -8523,6 +8529,35 @@ components:
           x-oaiTypeLabel: map
           nullable: true
 
+    GetMessageRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - message_id
+      properties:
+        role:
+          type: string
+          enum: ["user"]
+          description: The role of the entity that is retrieving the message.
+        content:
+          type: string
+          minLength: 1
+          maxLength: 32768
+          description: The content of the message.
+        file_ids:
+          description: A list of [File](/docs/api-reference/files) IDs that the message should use. There can be a maximum of 10 files attached to a message. Useful for tools like `retrieval` and `code_interpreter` that can access and use files.
+          default: []
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+        metadata:
+          description: *metadata_description
+          type: object
+          x-oaiTypeLabel: map
+          nullable: true
+          
     ModifyMessageRequest:
       type: object
       additionalProperties: false
